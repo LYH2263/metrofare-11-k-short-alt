@@ -41,8 +41,13 @@ class MetroService:
         result = quote_route(edges, start, end, rules)
         run_id = None
         if persist and result.get("reachable"):
-            run_id = runs_repo.insert(self._conn, "quote", {"start": start, "end": end}, result)
+            # 只落最短路那一条记录；次短仅当时展示，且历史记录不被后续对照改写
+            record = {k: v for k, v in result.items() if k != "alt"}
+            run_id = runs_repo.insert(self._conn, "quote", {"start": start, "end": end}, record)
         return {"run_id": run_id, **result}
+
+    def delete_edge(self, a: str, b: str):
+        edges_repo.delete_pair(self._conn, a, b)
 
     def history(self, limit=50):
         return runs_repo.list_recent(self._conn, limit)
