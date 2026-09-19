@@ -29,6 +29,16 @@ class MetroService:
     def edges(self):
         return [{"a": a, "b": b} for a, b in edges_repo.list_pairs(self._conn)]
 
+    def add_edge(self, a: str, b: str):
+        if a == b:
+            raise ValueError("起讫站不能相同")
+        edges_repo.add_pair(self._conn, a, b)
+        return self.edges()
+
+    def delete_edge(self, a: str, b: str):
+        edges_repo.delete_pair(self._conn, a, b)
+        return self.edges()
+
     def fare_rules(self):
         return rules_repo.list_ordered(self._conn)
 
@@ -41,7 +51,9 @@ class MetroService:
         result = quote_route(edges, start, end, rules)
         run_id = None
         if persist and result.get("reachable"):
-            run_id = runs_repo.insert(self._conn, "quote", {"start": start, "end": end}, result)
+            # 只读对照：次短仅当次返回，落库只保留最短路那一条记录
+            stored = {k: v for k, v in result.items() if k != "second"}
+            run_id = runs_repo.insert(self._conn, "quote", {"start": start, "end": end}, stored)
         return {"run_id": run_id, **result}
 
     def history(self, limit=50):

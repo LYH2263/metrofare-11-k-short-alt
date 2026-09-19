@@ -17,3 +17,10 @@ button { background: var(--accent); border:0; padding:0.4rem 0.85rem; border-rad
 .hero-num { font-size:2.2rem; font-weight:700; color: var(--accent); }
 .muted { color: var(--muted); }
 input, select { background:#0a1528; border:1px solid var(--muted); color:var(--text); padding:0.35rem; border-radius:4px; }
+.compare { display:flex; flex-wrap:wrap; gap:1rem; }
+.route-card { flex:1 1 320px; border:1px solid #243860; border-radius:8px; padding:0.75rem 1rem; background:#101a36; }
+.route-card h3 { margin:0 0 0.5rem; color: var(--accent); }
+.route-path { min-height:2.6em; color: var(--text); }
+.edge-row { display:flex; align-items:center; gap:0.75rem; padding:0.35rem 0; border-bottom:1px solid #243860; }
+.edge-row .edge-name { flex:1; }
+button.danger { background:#e05a5a; color:#1a0606; }

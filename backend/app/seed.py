@@ -36,6 +36,7 @@ def init_db():
         )
         conn.execute("INSERT INTO settings(key,value) VALUES ('currency','CNY')")
         q1 = quote_route(EDGES, "A1", "A3", RULES)
+        q1 = {k: v for k, v in q1.items() if k != "second"}
         conn.execute(
             "INSERT INTO calc_runs(kind,input_json,result_json,created_at) VALUES (?,?,?,datetime('now'))",
             ("quote", json.dumps({"start": "A1", "end": "A3"}), json.dumps(q1, ensure_ascii=False)),
